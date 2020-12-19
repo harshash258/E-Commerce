@@ -1,0 +1,43 @@
+{% extends "Amazon/HTMLtemplate.html" %}
+{% load static %}
+
+{% block title %}
+    Sign In
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/styles.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div id="signIn">
+        <h3 style=" margin-bottom: 40px; color: #63f363"><b><i><u>
+            Login to get full experience.</u></i></b>
+        </h3>
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+
+            <input id="input" type="email" placeholder="Email" name="email" autocomplete="off">
+            <br>
+            <input id="input" type="password" placeholder="Password" name="password">
+            <br>
+            <input type="checkbox" value="Remember me">
+            <label>Remember me.</label>
+            <button id="submit">Login</button>
+        </form>
+
+        <div>
+            <strong>Menu:</strong>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+                    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+                {% else %}
+                    <li><a href="{% url 'account_login' %}">Sign In</a></li>
+                    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

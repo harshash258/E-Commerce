@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    {% block stylesheet %}
+        <link rel="stylesheet" type="text/css" href="{% static 'Amazon/baseStyle.css' %}"/>
+    {% endblock %}
+    <style type="text/css">
+        #searchProduct {
+            width: 200px;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom:-15px;
+        }
+        button{
+            background-color: transparent;
+            text-decoration: none;
+        }
+        .searchDiv {
+            margin-right: auto;
+            margin-left: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="topnav">
+    <a class="active" href="{% url 'index' %}">Home</a>
+    <a>Products</a>
+    <a>About</a>
+    <a href="{% url 'signIn' %}" style="float: right">Sign In</a>
+    <a style="float: right">
+        <img id="cartButton" src="https://img.icons8.com/pastel-glyph/64/000000/shopping-cart--v1.png"
+             width="15" height="15"/>
+    </a>
+
+    <div class="searchDiv">
+        <form class="searchBar">
+            {% csrf_token %}
+            <input id="searchProduct" type="search" placeholder="Search Product..." autocomplete="off">
+            <button>
+                <img width="30" height="30" src="{% static 'Amazon/searchIcon.png' %}" alt="Search Button"
+                     id="searchButton">
+            </button>
+        </form>
+    </div>
+</div>
+{% block body %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "Amazon/HTMLtemplate.html" %}
+{% load static %}
+
+{% block title %}
+    Amazon - {{ productName }}
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'Amazon/viewProductStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div id="container">
+        <div class="left">
+            <img id="productImage" src="{{ product.productImage.url }}" width="200" height="350">
+        </div>
+        <div class="right">
+            <h1 align="center">{{ productName }}</h1><br>
+            <label id="description">{{ product.productInformation|safe }}</label><br>
+            <label id="price">
+                <b>Rs.</b>
+                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice }}</label>
+                <b>{{ product.productDiscountedPrice }}</b>
+            </label>
+            <button id="cartButton">Add to Cart</button>
+        </div>
+    </div>
+{% endblock %}

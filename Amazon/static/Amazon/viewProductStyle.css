@@ -1,0 +1,38 @@
+#container {
+    width: 100%;
+}
+
+.left {
+    position: absolute;
+    width: 30%;
+    padding: 10px;
+}
+
+.left #productImage {
+    margin-left: 70px;
+}
+
+.right {
+    position: absolute;
+    left: 30%;
+    width: auto;
+    border: 1px solid green;
+    padding: 20px;
+    margin: 10px;
+    overflow: auto;
+}
+
+.right #description {
+    margin: 10px;
+}
+
+#price {
+    font-size: 24px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+#cartButton {
+    float: right;
+}
