@@ -4,49 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
-    {% block stylesheet %}
-        <link rel="stylesheet" type="text/css" href="{% static 'Amazon/baseStyle.css' %}"/>
-    {% endblock %}
+    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
     <style type="text/css">
-        #searchProduct {
-            width: 200px;
-            padding: 10px;
+        img:hover{
+            background-color: #414141;
             border-radius: 10px;
-            margin-bottom:-15px;
         }
-        button{
-            background-color: transparent;
-            text-decoration: none;
+        .nav-item:hover{
+            background-color: #414141;
         }
-        .searchDiv {
-            margin-right: auto;
-            margin-left: auto;
-            text-align: center;
-        }
+        {% block style %}
+        {% endblock %}
     </style>
+    {% block stylesheet %}
+    {% endblock %}
 </head>
 <body>
-<div class="topnav">
-    <a class="active" href="{% url 'index' %}">Home</a>
-    <a>Products</a>
-    <a>About</a>
-    <a href="{% url 'signIn' %}" style="float: right">Sign In</a>
-    <a style="float: right">
-        <img id="cartButton" src="https://img.icons8.com/pastel-glyph/64/000000/shopping-cart--v1.png"
-             width="15" height="15"/>
-    </a>
-
-    <div class="searchDiv">
-        <form class="searchBar">
-            {% csrf_token %}
-            <input id="searchProduct" type="search" placeholder="Search Product..." autocomplete="off">
-            <button>
-                <img width="30" height="30" src="{% static 'Amazon/searchIcon.png' %}" alt="Search Button"
-                     id="searchButton">
-            </button>
-        </form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">Amazon Copy</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+            </ul>
+            <form class="d-flex" action="{% url 'searchResult' %}" method="post">
+                {% csrf_token %}
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                       style="border-radius: 10px;" name="search">
+                <button class="btn btn-outline-success" type="submit" style="border-radius: 10px;">Search</button>
+            </form>
+            <ul class="navbar-nav" style="float: right;margin-left: 10px">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page">
+                        <img src='https://img.icons8.com/dotty/80/000000/favorite-cart.png' width="30" height="30"
+                             alt="My Cart" style="cursor: pointer;">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'signIn' %}">Sign In</a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
+</nav>
+
 {% block body %}
 {% endblock %}
 </body>

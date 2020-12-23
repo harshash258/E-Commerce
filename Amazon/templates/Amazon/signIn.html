@@ -2,20 +2,23 @@
 {% load static %}
 
 {% block title %}
-    Sign In
+    AmazonCopy - Sign In
 {% endblock %}
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
     <link rel="stylesheet" href="{% static 'Amazon/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
 {% endblock %}
 
 {% block body %}
-    <div id="signIn">
+    <div class="container text-center">
         <h3 style=" margin-bottom: 40px; color: #63f363"><b><i><u>
             Login to get full experience.</u></i></b>
         </h3>
-        <form action="{% url 'index' %}" method="post">
+        <form action="{% url 'index' %}" method="post"
+              style="position: absolute; top: 40%; left: 40%; border: 1px solid black; padding: 10px;
+              border-radius: 10px;">
             {% csrf_token %}
 
             <input id="input" type="email" placeholder="Email" name="email" autocomplete="off">
@@ -26,18 +29,5 @@
             <label>Remember me.</label>
             <button id="submit">Login</button>
         </form>
-
-        <div>
-            <strong>Menu:</strong>
-            <ul>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-                    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-                {% else %}
-                    <li><a href="{% url 'account_login' %}">Sign In</a></li>
-                    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-                {% endif %}
-            </ul>
-        </div>
     </div>
 {% endblock %}

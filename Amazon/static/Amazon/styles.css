@@ -1,13 +1,4 @@
-signIn {
-    padding: 20px;
-    position: absolute;
-    top: 40%;
-    left: 40%;
-    border: 1px solid black;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-}
+
 
 #input {
     padding: 10px;

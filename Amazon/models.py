@@ -1,10 +1,11 @@
 from django.db import models
-from django.conf import settings
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class Product(models.Model):
     productId = models.CharField(primary_key=True, max_length=20)
-    productName = models.CharField(max_length=100)
+    productName = models.CharField(max_length=200)
     productDescription = models.CharField(max_length=300)
     productRealPrice = models.IntegerField()
     productDiscountedPrice = models.IntegerField()
@@ -17,16 +18,10 @@ class Product(models.Model):
         return f"{self.productName} -- {self.productDiscountedPrice}"
 
 
-class Order(models.Model):
-    item = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-
-class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    ordered = models.BooleanField(default=False)
-    items = models.ManyToManyField(Order)
-    startDate = models.DateTimeField(auto_now_add=True)
-    orderDate = models.DateTimeField()
+class UserLogin(UserCreationForm):
+    userId = models.CharField(primary_key=True, max_length=20)
+    userEmail = models.EmailField()
+    userPassword = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.userId} : {self.userEmail}"

@@ -1,40 +1,37 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
 
+{% block title %}
+    Amazon Copy - Search Result
+{% endblock %}
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/indexStyle.css' %}">
     <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
 {% endblock %}
 
-{% block title %}
-    AmazonCopy
-{% endblock %}
-
 {% block body %}
-
-    {% for product in products %}
+    {% for searchResult in searchResults %}
         <div class="container-fluid text-center" style="margin-bottom: 40px">
-            <a href="{% url 'viewProduct' product.productName %}" style="float: left">
-                <img src="{{ product.productImage.url }}" width="120" height="140"
+            <a href="{% url 'viewProduct' searchResult.productName %}" style="float: left">
+                <img src="{{ searchResult.productImage.url }}" width="120" height="140"
                      alt="Product Image">
             </a>
-            <a href="{% url 'viewProduct' product.productName %}" style="cursor: pointer;">
+            <a href="{% url 'viewProduct' searchResult.productName %}" style="cursor: pointer;">
                 <label style="font-size: 26px; color: #0b7dda; cursor: pointer;">
-                    <b>{{ product.productName }}</b>
+                    <b>{{ searchResult.productName }}</b>
                 </label>
             </a><br>
             <label style="font-size: 20px;">
-                {{ product.productDescription|slice:150|safe }}
+                {{ searchResult.productDescription|slice:150|safe }}
             </label><br>
             <br>
             <label style="font-size: 24px">
                 <b>Rs.</b>
-                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice }}</label>
-                <b>{{ product.productDiscountedPrice }}</b>
+                <label style="text-decoration: line-through;font-size:14px">{{ searchResult.productRealPrice }}</label>
+                <b>{{ searchResult.productDiscountedPrice }}</b>
             </label>
         </div>
         <hr>
     {% endfor %}
-
 {% endblock %}

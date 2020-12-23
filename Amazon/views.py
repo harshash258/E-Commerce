@@ -23,3 +23,15 @@ def viewProduct(request, slug):
         return render(request, "Amazon/viewProduct.html", context)
     except Product.DoesNotExist:
         return HttpResponse("Page Not Found")
+
+
+def searchProduct(request):
+    name = request.POST.get("search")
+    try:
+        product = Product.objects.filter(productName__contains=name)
+        context = {
+            'searchResults': product,
+        }
+        return render(request, "Amazon/searchResult.html", context)
+    except Product.DoesNotExist:
+        return HttpResponse("Page Not Found")

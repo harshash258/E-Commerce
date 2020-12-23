@@ -1,0 +1,26 @@
+{% extends "Amazon/HTMLtemplate.html" %}
+{% load static %}
+
+{% block title %}
+    Amazon Copy - My Cart
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/cartStyle.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="cartItem">
+        <img src="" width="120" height="120">
+        <div id="productInfo">
+            <h2>Product Name</h2><br>
+            <p>This is the product description</p>
+             <label style="font-size: 24px">
+                <b>Rs.</b>
+                <label style="text-decoration: line-through;font-size:14px">21,000</label>
+                <b>22,000</b>
+            </label>
+        </div>
+    </div>
+{% endblock %}
