@@ -6,13 +6,17 @@
     <title>{% block title %} {% endblock %}</title>
 
     <style type="text/css">
-        img:hover {
+        .img:hover {
             background-color: #414141;
             border-radius: 10px;
         }
 
         .nav-item:hover {
             background-color: #414141;
+        }
+        .dropdown-item:hover {
+            text-decoration: none;
+            background-color: #414141 !important;
         }
 
         @media all and (min-width: 992px) {
@@ -32,11 +36,12 @@
                 margin-top: 0;
             }
         }
-        .d-flex{
+        .d-flex {
             margin-left: auto;
             margin-right: auto;
             text-align: center;
         }
+
         {% block style %}
         {% endblock %}
     </style>
@@ -65,22 +70,30 @@
                 {% csrf_token %}
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                        style="border-radius: 10px;" name="search">
-                <button class="btn btn-outline-success" type="submit" style="border-radius: 10px;">Search</button>
+                <button class="btn btn-outline-success" type="submit" style="border-radius: 10px;">
+                    <img src="{% static 'Amazon/searchIcon.png' %}" width="30" height="30"
+                         alt="Search Product" style="cursor: pointer;">
+                </button>
             </form>
             <ul class="navbar-nav" style="float: right;margin-left: 10px">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page">
-                        <img src='https://img.icons8.com/dotty/80/000000/favorite-cart.png' width="30" height="30"
-                             alt="My Cart" style="cursor: pointer;">
+                        <img src="{% static 'Amazon/cart.png' %}" width="30" height="30"
+                             alt="My Cart" style="cursor: pointer;" class="img">
                     </a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown"> Hello {{ request.user }} </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"> Profile</a></li>
+                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown">
+                            Hello {{ request.user }} </a>
+                        <ul class="dropdown-menu bg-dark">
+                            <li class="drop">
+                                <a class="dropdown-item text-white" href="#"> Profile</a>
+                            </li>
                             <hr>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"> Log out </a></li>
+                            <li class="drop">
+                                <a class="dropdown-item text-white" href="{% url 'logout' %}"> Log out </a>
+                            </li>
                         </ul>
                     </li>
                 {% else %}
