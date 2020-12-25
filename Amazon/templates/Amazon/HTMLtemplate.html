@@ -4,19 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
+
     <style type="text/css">
-        img:hover{
+        img:hover {
             background-color: #414141;
             border-radius: 10px;
         }
-        .nav-item:hover{
+
+        .nav-item:hover {
             background-color: #414141;
+        }
+
+        @media all and (min-width: 992px) {
+            .navbar .nav-item .dropdown-menu {
+                display: none;
+            }
+
+            .navbar .nav-item:hover .nav-link {
+                color: #fff;
+            }
+
+            .navbar .nav-item:hover .dropdown-menu {
+                display: block;
+            }
+
+            .navbar .nav-item .dropdown-menu {
+                margin-top: 0;
+            }
+        }
+        .d-flex{
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
         }
         {% block style %}
         {% endblock %}
     </style>
     {% block stylesheet %}
+        <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
     {% endblock %}
 </head>
 <body>
@@ -49,9 +74,20 @@
                              alt="My Cart" style="cursor: pointer;">
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'signIn' %}">Sign In</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown"> Hello {{ request.user }} </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"> Profile</a></li>
+                            <hr>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"> Log out </a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signIn' %}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

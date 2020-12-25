@@ -1,5 +1,6 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     AmazonCopy - Sign In
@@ -16,12 +17,15 @@
         <h3 style=" margin-bottom: 40px; color: #63f363"><b><i><u>
             Login to get full experience.</u></i></b>
         </h3>
-        <form action="{% url 'index' %}" method="post"
-              style="position: absolute; top: 40%; left: 40%; border: 1px solid black; padding: 10px;
+        <form method="post" style="position: absolute; top: 40%; left: 40%; border: 1px solid black; padding: 10px;
               border-radius: 10px;">
             {% csrf_token %}
-
-            <input id="input" type="email" placeholder="Email" name="email" autocomplete="off">
+            {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <input id="input" type="text" placeholder="Username" name="username" autocomplete="off">
             <br>
             <input id="input" type="password" placeholder="Password" name="password">
             <br>

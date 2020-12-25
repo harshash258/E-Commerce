@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
@@ -18,10 +17,3 @@ class Product(models.Model):
         return f"{self.productName} -- {self.productDiscountedPrice}"
 
 
-class UserLogin(UserCreationForm):
-    userId = models.CharField(primary_key=True, max_length=20)
-    userEmail = models.EmailField()
-    userPassword = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"{self.userId} : {self.userEmail}"

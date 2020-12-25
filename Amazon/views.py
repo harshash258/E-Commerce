@@ -1,5 +1,8 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .models import Product
+from .forms import CreateUser
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
@@ -9,8 +12,43 @@ def index(request):
     return render(request, "Amazon/index.html", context)
 
 
+def register(request):
+    form = CreateUser()
+    if request.method == 'POST':
+        form = CreateUser(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+        else:
+            messages.error(request, "Error in creating a Account")
+            return redirect('register')
+    context = {
+        'form': form,
+    }
+    return render(request, "Amazon/register.html", context)
+
+
 def signIn(request):
-    return render(request, "Amazon/signIn.html")
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            messages.error(request, "Username or password incorrect")
+    context = {
+
+    }
+    return render(request, "Amazon/signIn.html", context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
 
 
 def viewProduct(request, slug):
