@@ -3,8 +3,8 @@
 
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/indexStyle.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/indexStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -25,7 +25,7 @@
                 </label>
             </a><br>
             <label style="font-size: 20px;">
-                {{ product.productDescription|slice:150|safe }}
+                {{ product.productDescription|slice:60|safe }}
             </label><br>
             <br>
             <label style="font-size: 24px">

@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/register.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/register.css' %}">
 {% endblock %}
 
 
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-center">Have an account? <a href="{% url 'signIn' %}">Log In</a></p>
+                <p class="text-center">Have an account? <a href="{% url 'login' %}">Log In</a></p>
             </form>
         </div>
     </div>

@@ -4,7 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %}</title>
+    {% block stylesheet %}
+        <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        let user = "{{ request.user }}";
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+    </script>
     <style type="text/css">
         .img:hover {
             background-color: #414141;
@@ -14,6 +42,7 @@
         .nav-item:hover {
             background-color: #414141;
         }
+
         .dropdown-item:hover {
             text-decoration: none;
             background-color: #414141 !important;
@@ -36,32 +65,45 @@
                 margin-top: 0;
             }
         }
+
         .d-flex {
             margin-left: auto;
             margin-right: auto;
             text-align: center;
         }
 
+        .badge {
+            padding-left: 9px;
+            padding-right: 9px;
+            -webkit-border-radius: 9px;
+            -moz-border-radius: 9px;
+            border-radius: 9px;
+        }
+
+        #lblCartCount {
+            font-size: 12px;
+            background: #ff0000;
+            color: white;
+            padding: 5px;
+            vertical-align: top;
+            margin-left: -10px;
+        }
+
         {% block style %}
         {% endblock %}
     </style>
-    {% block stylesheet %}
-        <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
-    {% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'index' %}">Amazon Copy</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
+            <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
                 </li>
@@ -69,17 +111,19 @@
             <form class="d-flex" action="{% url 'searchResult' %}" method="post">
                 {% csrf_token %}
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                       style="border-radius: 10px;" name="search">
+                       style="border-radius: 10px;" name="search" autocomplete="off">
                 <button class="btn btn-outline-success" type="submit" style="border-radius: 10px;">
-                    <img src="{% static 'Amazon/searchIcon.png' %}" width="30" height="30"
+                    <img src="{% static 'Amazon/images/searchIcon.png' %}" width="30" height="30"
                          alt="Search Product" style="cursor: pointer;">
                 </button>
             </form>
             <ul class="navbar-nav" style="float: right;margin-left: 10px">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page">
-                        <img src="{% static 'Amazon/cart.png' %}" width="30" height="30"
+                    <a class="nav-link active" aria-current="page" href="{% url 'myCart' %}">
+                        <img src="{% static 'Amazon/images/cart.png' %}" width="30" height="30"
                              alt="My Cart" style="cursor: pointer;" class="img">
+                        <span class='badge badge-warning' id='lblCartCount'> {{ number }} </span>
+
                     </a>
                 </li>
                 {% if user.is_authenticated %}
@@ -98,7 +142,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signIn' %}">Login</a>
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                 {% endif %}
             </ul>
@@ -108,5 +152,7 @@
 
 {% block body %}
 {% endblock %}
+<script src="{% static 'Amazon/js/add-to-cart.js' %}">
+</script>
 </body>
 </html>

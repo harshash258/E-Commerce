@@ -1,8 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import Product
+from django.http import JsonResponse
+from .models import Product, Cart, Order, Customer
 from .forms import CreateUser
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+import json
 
 
 def index(request):
@@ -32,7 +34,6 @@ def signIn(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -43,12 +44,29 @@ def signIn(request):
     context = {
 
     }
-    return render(request, "Amazon/signIn.html", context)
+    return render(request, "Amazon/login.html", context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('index')
+
+
+def viewCart(request):
+    global order
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, orderCompleted=False)
+        items = order.cart_set.all()
+        numberOfItems = order.getNumberOfItems
+    else:
+        return redirect('login')
+    context = {
+        'items': items,
+        'order': order,
+        'totalItems': numberOfItems
+    }
+    return render(request, "Amazon/cart.html", context)
 
 
 def viewProduct(request, slug):
@@ -73,3 +91,26 @@ def searchProduct(request):
         return render(request, "Amazon/searchResult.html", context)
     except Product.DoesNotExist:
         return HttpResponse("Page Not Found")
+
+
+def addToCart(request):
+    data = json.loads(request.body)
+    productId = data['productID']
+    action = data['action']
+
+    customer = request.user.customer
+    product = Product.objects.get(productId=productId)
+
+    checkOrder, created = Order.objects.get_or_create(customer=customer, orderCompleted=False)
+    cartItem, created = Cart.objects.get_or_create(order=checkOrder, product=product)
+
+    if action == 'add':
+        cartItem.quantity = (cartItem.quantity + 1)
+    elif action == 'remove':
+        cartItem.quantity = (cartItem.quantity - 1)
+
+    cartItem.save()
+
+    if cartItem.quantity <= 0:
+        cartItem.delete()
+    return JsonResponse('Item was added to cart.', safe=False)

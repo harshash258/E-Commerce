@@ -6,21 +6,56 @@
 {% endblock %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/cartStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/cartStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
 {% block body %}
-    <div class="cartItem">
-        <img src="" width="120" height="120">
-        <div id="productInfo">
-            <h2>Product Name</h2><br>
-            <p>This is the product description</p>
-             <label style="font-size: 24px">
-                <b>Rs.</b>
-                <label style="text-decoration: line-through;font-size:14px">21,000</label>
-                <b>22,000</b>
-            </label>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box-element">
+
+                    <a class="btn btn-outline-dark" href="{% url 'index' %}">&#x2190; Continue Shopping</a>
+                    <br>
+                    <br>
+                    <table class="table">
+                        <tr>
+                            <th><h5>Items: <strong>{{ order.getCartItems }}</strong></h5></th>
+                            <th><h5>Total:<strong> Rs. {{ order.getCartTotal }}</strong></h5></th>
+                            <th>
+                                <a style="float:right; margin:5px;" class="btn btn-success" href="#">Checkout</a>
+                            </th>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <br>
+                <div class="box-element">
+                    <table class="table table-hover text-center font-monospace">
+                        <tr>
+                            <th></th>
+                            <th>Name of Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                        {% for item in items %}
+                            <tr style="border-bottom: 1px solid #a0a0a0;">
+                                <td><img src="{{ item.product.productImage.url }}" width="80" height="50"
+                                         alt="{{ item.product.productName }}"></td>
+                                <td>{{ item.product.productName }}</td>
+                                <td>{{ item.product.productDiscountedPrice }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.getProductTotal }}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

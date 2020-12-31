@@ -6,30 +6,17 @@
 {% endblock %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/viewProductStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/viewProductStyle.css' %}">
 {% endblock %}
 
-{% block style %}
-    #cartButton {
-    float: right;
-    width: 100px;
-    height: 50px;
-    background-color: #a52834;
-    color: white;
-    }
-    #cartButton:hover{
-    background-color: #0b7dda;
-    }
-
-{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
         <div class="left">
             <img id="productImage" src="{{ product.productImage.url }}" width="350" height="450"
-                 style="margin-left: 20px">
+                 style="margin-left: 20px" alt="{{ productName }}">
         </div>
         <div class="right">
             <h1 align="center" style="color: #0b7dda">{{ productName }}</h1><br>
@@ -39,9 +26,32 @@
                 <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice }}</label>
                 <b>{{ product.productDiscountedPrice }}</b>
             </label>
-            <button id="cartButton">
-                Add to Cart
-            </button>
+
+            {% if user.is_authenticated %}
+                <button data-product="{{ product.productId }}" data-action="add" class="btn btn-success update-cart" style="float: right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-cart"
+                         viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0
+                    0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5
+                    12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7
+                    0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                    </svg>
+                    Add to Cart
+                </button>
+            {% else %}
+                <a class="btn btn-success" style="float: right" href="{% url 'login' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-cart"
+                         viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0
+                    0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5
+                    12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7
+                    0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                    </svg>
+                    Add to Cart
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

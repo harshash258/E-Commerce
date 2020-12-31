@@ -7,30 +7,34 @@
 {% endblock %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/baseStyle.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'Amazon/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
 {% block body %}
     <div class="container text-center">
-        <h3 style=" margin-bottom: 40px; color: #63f363"><b><i><u>
-            Login to get full experience.</u></i></b>
-        </h3>
+
         <form method="post" style="position: absolute; top: 40%; left: 40%; border: 1px solid black; padding: 10px;
               border-radius: 10px;">
+            <h3 style=" margin-bottom: 40px; color: #63f363"><b><i><u>
+                Login to get full experience.</u></i></b>
+            </h3>
             {% csrf_token %}
             {% for message in messages %}
                 <div class="alert alert-danger" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}
+
+            <label for="input">Username:</label>
             <input id="input" type="text" placeholder="Username" name="username" autocomplete="off">
             <br>
+
+            <label for="input">Password:</label>
             <input id="input" type="password" placeholder="Password" name="password">
             <br>
-            <input type="checkbox" value="Remember me">
-            <label>Remember me.</label>
+
             <button id="submit">Login</button>
         </form>
     </div>

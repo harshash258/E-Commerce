@@ -28,14 +28,3 @@
     margin-left: auto;
     text-align: center;
 }
-
-#cartButton {
-    float: right;
-    width: 100px;
-    height: 50px;
-    background-color: #a52834;
-    color: white;
-}
-#cartButton:hover{
-    background-color: #0b7dda;
-}
