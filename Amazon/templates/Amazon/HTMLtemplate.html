@@ -132,7 +132,9 @@
                             Hello {{ request.user }} </a>
                         <ul class="dropdown-menu bg-dark">
                             <li class="drop">
-                                <a class="dropdown-item text-white" href="#"> Profile</a>
+                                <a class="dropdown-item text-white" href="{% url 'profile' request.user  %}">
+                                    Profile
+                                </a>
                             </li>
                             <hr>
                             <li class="drop">

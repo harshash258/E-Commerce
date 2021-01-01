@@ -4,7 +4,18 @@ from .models import Product, Cart, Order, Customer
 from .forms import CreateUser
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import User
 import json
+
+
+def viewProfile(request, username):
+    user = User.objects.get(username=username)
+    customer = Customer.objects.get(user=user)
+    context = {
+        'user': user,
+        'customer': customer
+    }
+    return render(request, "Amazon/profile.html", context)
 
 
 def index(request):

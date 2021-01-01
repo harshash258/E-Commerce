@@ -21,9 +21,19 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
+    profileImage = models.ImageField(blank=True, null=True, default='profile.png')
+    phoneNumber = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.profileImage.url
+        except:
+            url = ''
+        return url
 
 
 class Order(models.Model):
