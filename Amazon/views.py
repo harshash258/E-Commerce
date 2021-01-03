@@ -125,3 +125,21 @@ def addToCart(request):
     if cartItem.quantity <= 0:
         cartItem.delete()
     return JsonResponse('Item was added to cart.', safe=False)
+
+
+def filterByPrice(request, event):
+    ''' data = json.loads(request.body)
+     value = data['value']
+
+     print(value)'''
+
+    if event == "low":
+        product = Product.objects.all().order_by('productDiscountedPrice')
+    elif event == "high":
+        product = Product.objects.all().order_by('-productDiscountedPrice')
+    else:
+        product = Product.objects.all()
+
+    print(event)
+
+    return render(request, 'Amazon/filteredResult.html', {"product": product})

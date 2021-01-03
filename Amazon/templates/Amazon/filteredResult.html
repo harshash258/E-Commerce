@@ -1,46 +1,16 @@
-{% extends "Amazon/HTMLtemplate.html" %}
+{% extends 'Amazon/HTMLtemplate.html' %}
 {% load static %}
 
-
 {% block title %}
-    AmazonCopy
+    Amazon Copy
 {% endblock %}
-
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
-{% block style %}
-    select{
-    padding:5px;
-    color:white;
-    appearance: none;
-    }
-    select option{
-    margin-right:10px;
-    }
-{% endblock %}
-<style type="text/css">
-    select {
-        appearance: none;
-        background: #ff4e4e;
-    }
-</style>
 {% block body %}
-
-    <div class="d-flex flex-row-reverse" style="margin-right: 20px; margin-bottom: 20px;">
-        <label>
-            <select class="bg-dark" name="price" id="priceFilter">
-                <option value="normal">Sort by Price</option>
-                <option value="low"><a href="{% url 'filterByPrice' 'low' %}">Low-to-High</a></option>
-                <option value="high"><a href="{% url 'filterByPrice' 'high' %}">High-to-Low</a></option>
-            </select>
-        </label>
-    </div>
-
-
-    {% for product in products %}
+    {% for product in  products %}
         <div class="container-fluid text-center" style="margin-bottom: 40px">
             <a href="{% url 'viewProduct' product.productName %}" style="float: left">
                 <img src="{{ product.productImage.url }}" width="120" height="140"

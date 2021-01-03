@@ -13,5 +13,6 @@ urlpatterns = [
                   path("search_result/", views.searchProduct, name="searchResult"),
                   path("my_cart/", views.viewCart, name='myCart'),
                   path("updateItem/", views.addToCart),
-                  path('profile/<username>', views.viewProfile, name='profile'),
+                  path('profile/<username>/', views.viewProfile, name='profile'),
+                  path('sort=/<str:event>/', views.filterByPrice, name='filterByPrice')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

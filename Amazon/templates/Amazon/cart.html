@@ -5,8 +5,16 @@
     Amazon Copy - My Cart
 {% endblock %}
 
+{% block style %}
+    img:hover{
+        background-color: #AEAEAE;
+    cursor:pointer
+    }
+
+{% endblock %}
+
+
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/css/cartStyle.css' %}">
     <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
@@ -43,12 +51,23 @@
                         </tr>
                         {% for item in items %}
                             <tr style="border-bottom: 1px solid #a0a0a0;">
-                                <td><img src="{{ item.product.productImage.url }}" width="80" height="50"
-                                         alt="{{ item.product.productName }}"></td>
-                                <td>{{ item.product.productName }}</td>
-                                <td>{{ item.product.productDiscountedPrice }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.getProductTotal }}</td>
+                                <td class="align-middle"><img src="{{ item.product.productImage.url }}" width="80"
+                                                              height="50"
+                                                              alt="{{ item.product.productName }}"></td>
+                                <td class="align-middle">{{ item.product.productName }}</td>
+                                <td class="align-middle">{{ item.product.productDiscountedPrice }}</td>
+                                <td class="align-middle">
+                                   &nbsp;
+                                    <img data-product="{{ item.product.productId }}" data-action="add"
+                                         src="{% static 'Amazon/images/up.png' %}" width="20" height="10"
+                                         alt="increase quantity" class="update-cart"><br>
+                                    {{ item.quantity }}
+
+                                    <img data-product="{{ item.product.productId }}" data-action="remove"
+                                         src="{% static 'Amazon/images/down.png' %}" width="20" height="10"
+                                         alt="decrease quantity" class="update-cart ">
+                                </td>
+                                <td class="align-middle">{{ item.getProductTotal }}</td>
                             </tr>
                         {% endfor %}
 
