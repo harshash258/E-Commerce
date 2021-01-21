@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 
 class Product(models.Model):
@@ -9,7 +10,7 @@ class Product(models.Model):
     productRealPrice = models.IntegerField()
     productDiscountedPrice = models.IntegerField()
     productImage = models.ImageField()
-    productInformation = models.TextField()
+    productInformation = RichTextField()
     productTotalQty = models.IntegerField()
     alias = models.CharField(max_length=200)
 
@@ -19,7 +20,7 @@ class Product(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(max_length=100)
     profileImage = models.ImageField(blank=True, null=True, default='profile.png')
     phoneNumber = models.CharField(max_length=10, blank=True, null=True)

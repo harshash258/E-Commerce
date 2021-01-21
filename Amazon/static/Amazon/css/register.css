@@ -1,4 +1,16 @@
+.container{
+    position: absolute;
+    right: 40%;
+    width: 400px;
+}
 .form{
-    border: 1px solid black;
     padding: 10px;
+    clear: both;
+    border: 1px solid black;
+}
+.form input{
+    border:1px solid black;
+    padding: 5px;
+    border-radius: 10px;
+    display: inline;
 }

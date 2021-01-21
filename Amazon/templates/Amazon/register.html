@@ -15,51 +15,51 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            <form method="post" class="form">
+            <form method="post" class="offset-4 form">
                 {% csrf_token %}
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h2>Register</h2></div>
-                        <div class="panel-body">
-                            {% for message in messages %}
-                                <div class="alert alert-danger" role="alert">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
+                <div>
 
-                            <div class="form-group clearfix">
-                                <label for="{{ form.username.label }}" class="col-md-4 control-label text-right">Username</label>
-                                <div class="col-md-6">
-                                    {{ form.username }}
-                                </div>
+                    <div class="panel-heading">
+                        <h2><u><strong>
+                            Create a Account
+                        </strong></u></h2>
+                    </div>
+                    <div class="panel-body">
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
                             </div>
-                            <div class="form-group clearfix">
-                                <label for="{{ form.email.id_for_label }}" class="col-md-4 control-label text-right">Email<span
-                                        class="text-red">*</span>:</label>
-                                <div class="col-md-6">
-                                    {{ form.email }}
-                                </div>
-                            </div>
-                            <div class="form-group clearfix">
-                                <label for="{{ form.password.id_for_label }}" class="col-md-4 control-label text-right">Password<span
-                                        class="text-red">*</span>:</label>
-                                <div class="col-md-6">
-                                    {{ form.password1 }}
-                                </div>
-                            </div>
-                            <div class="form-group clearfix">
-                                <label for="{{ form.password_repeat.id_for_label }}"
-                                       class="col-md-4 control-label text-right">Confirm
-                                    password:</label>
-                                <div class="col-md-6">
-                                    {{ form.password2 }}
-                                </div>
-                            </div>
-                            <br>
+                        {% endfor %}
 
-                            <div class="col-md-6 col-md-offset-4">
-                                <input type="submit" value="Register" class="btn btn-success">
-                            </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.username.label }}"><strong>Username:</strong></label>
+                            {{ form.username }}
+                        </div>
+                        <br>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.email.id_for_label }}">
+                                <strong>Email:</strong></label>
+                            {{ form.email }}
+                        </div>
+                        <br>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password.id_for_label }}">
+                                <strong>Password:</strong></label>
+
+                            {{ form.password1 }}
+                        </div>
+                    <br>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password_repeat.id_for_label }}">
+                                <strong>Confirm password:</strong></label>
+
+                            {{ form.password2 }}
+
+                        </div>
+                        <br>
+
+                        <div class="text-center">
+                            <input type="submit" value="Register" class="btn btn-success text-center">
                         </div>
                     </div>
                 </div>

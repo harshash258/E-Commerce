@@ -1,5 +1,6 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
+{% load humanize %}
 
 
 {% block title %}
@@ -9,32 +10,42 @@
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/indexStyle.css' %}">
 {% endblock %}
 
-{% block style %}
-    select{
-    padding:5px;
-    color:white;
-    appearance: none;
-    }
-    select option{
-    margin-right:10px;
-    }
-{% endblock %}
-<style type="text/css">
-    select {
-        appearance: none;
-        background: #ff4e4e;
-    }
-</style>
+
 {% block body %}
+
+    <script>
+        $('#priceFilter').on('change', 'input, select', function () {
+
+
+            let word = $("#priceFilter").val();
+            console.log(word);
+
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'index' %}',
+                data: {
+                    word: word,
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (error_data) {
+                    console.log(error_data)
+                }
+            });
+
+        });
+    </script>
 
     <div class="d-flex flex-row-reverse" style="margin-right: 20px; margin-bottom: 20px;">
         <label>
             <select class="bg-dark" name="price" id="priceFilter">
-                <option value="normal">Sort by Price</option>
-                <option value="low"><a href="{% url 'filterByPrice' 'low' %}">Low-to-High</a></option>
-                <option value="high"><a href="{% url 'filterByPrice' 'high' %}">High-to-Low</a></option>
+                <option value="normal" disabled>Sort by Price</option>
+                <option value="low">Low-to-High</option>
+                <option value="high">High-to-Low</option>
             </select>
         </label>
     </div>
@@ -57,10 +68,50 @@
             <br>
             <label style="font-size: 24px">
                 <b>Rs.</b>
-                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice }}</label>
-                <b>{{ product.productDiscountedPrice }}</b>
+                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice  | intcomma }}</label>
+                <b>{{ product.productDiscountedPrice | intcomma }}</b>
             </label>
         </div>
         <hr>
     {% endfor %}
+
+
+
+    <nav aria-label="...">
+        {% if products.has_other_pages %}
+            <ul class="pagination justify-content-center">
+
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page.number }}" tabindex="-1">
+                            Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for i  in products.paginator.page_range %}
+                    {% if products.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page.number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </nav>
 {% endblock %}

@@ -6,6 +6,42 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import User
 import json
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+
+'''
+def index(request):
+    fil = request.getlist('price')
+    if fil:
+        if fil == "low":
+            products = Product.objects.all().order_by('productDiscountedPrice')
+        elif fil == "high":
+            products = Product.objects.all().order_by('-productDiscountedPrice')
+        else:
+            products = Product.objects.all()
+        context = {
+            'products': products
+        }
+        return JsonResponse(context)
+    else:
+        context = {}
+        return render(request, "Amazon/index.html", context)
+
+'''
+
+
+def index(request):
+    products = Product.objects.all()
+    paginator = Paginator(products, 2)
+    page = request.GET.get('page')
+    page_product = paginator.get_page(page)
+
+    fil = request.GET.get('price')
+    print(fil)
+
+    context = {
+        'products': page_product
+    }
+    return render(request, "Amazon/index.html", context)
 
 
 def viewProfile(request, username):
@@ -18,19 +54,15 @@ def viewProfile(request, username):
     return render(request, "Amazon/profile.html", context)
 
 
-def index(request):
-    context = {
-        'products': Product.objects.all()
-    }
-    return render(request, "Amazon/index.html", context)
-
-
 def register(request):
     form = CreateUser()
     if request.method == 'POST':
         form = CreateUser(request.POST)
         if form.is_valid():
             form.save()
+            email = form.cleaned_data.get('email')
+            customer = Customer.objects.create(user=request.user, email=email)
+            customer.save()
             return redirect('index')
         else:
             messages.error(request, "Error in creating a Account")
@@ -96,10 +128,13 @@ def searchProduct(request):
     name = request.POST.get("search")
     try:
         product = Product.objects.filter(productName__contains=name)
-        context = {
-            'searchResults': product,
-        }
-        return render(request, "Amazon/searchResult.html", context)
+        if product is not None:
+            context = {
+                'searchResults': product,
+            }
+            return render(request, "Amazon/searchResult.html", context)
+        else:
+            return HttpResponse("No Product Found")
     except Product.DoesNotExist:
         return HttpResponse("Page Not Found")
 
@@ -127,19 +162,5 @@ def addToCart(request):
     return JsonResponse('Item was added to cart.', safe=False)
 
 
-def filterByPrice(request, event):
-    ''' data = json.loads(request.body)
-     value = data['value']
-
-     print(value)'''
-
-    if event == "low":
-        product = Product.objects.all().order_by('productDiscountedPrice')
-    elif event == "high":
-        product = Product.objects.all().order_by('-productDiscountedPrice')
-    else:
-        product = Product.objects.all()
-
-    print(event)
-
-    return render(request, 'Amazon/filteredResult.html', {"product": product})
+def checkOut(request):
+    return render(request, "Amazon/checkout.html")
