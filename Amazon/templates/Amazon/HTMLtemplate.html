@@ -8,12 +8,10 @@
         {% block style %}
         {% endblock %}
     </style>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+          integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}"/>
-    {% block stylesheet %}
-
-    {% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         let user = "{{ request.user }}";
 
@@ -35,6 +33,9 @@
         const csrftoken = getCookie('csrftoken');
 
     </script>
+    {% block stylesheet %}
+
+    {% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px">
@@ -65,7 +66,7 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'myCart' %}">
                         <img src="{% static 'Amazon/images/cart.png' %}" width="30" height="30"
                              alt="My Cart" style="cursor: pointer;" class="img">
-                        <span class='badge badge-warning' id='lblCartCount'>{{ number}} </span>
+                        <span class='badge badge-warning' id='lblCartCount'>{{ number }} </span>
 
                     </a>
                 </li>

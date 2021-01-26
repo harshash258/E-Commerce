@@ -1,21 +1,30 @@
-from django.db import models
-from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
+from django.db import models
+
+from .functions import convert
 
 
 class Product(models.Model):
     productId = models.AutoField(primary_key=True)
     productName = models.CharField(max_length=200)
-    productDescription = models.CharField(max_length=300)
+    productDescription = models.CharField(max_length=500)
     productRealPrice = models.IntegerField()
     productDiscountedPrice = models.IntegerField()
     productImage = models.ImageField()
     productInformation = RichTextField()
     productTotalQty = models.IntegerField()
     alias = models.CharField(max_length=200)
+    url = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f"{self.productName} -- {self.productDiscountedPrice}"
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        text = self.productName
+        self.url = convert(text)
+        super(Product, self).save(force_insert, force_update)
 
 
 class Customer(models.Model):

@@ -10,6 +10,15 @@
 {% endblock %}
 
 {% block body %}
+    <div class="d-flex flex-row-reverse" style="margin-right: 20px; margin-bottom: 20px;">
+        <label>
+            <select class="bg-dark" name="price" id="priceFilter" onchange="sendData()">
+                <option value="normal" disabled>Sort by Price</option>
+                <option value="low">Low-to-High</option>
+                <option value="high">High-to-Low</option>
+            </select>
+        </label>
+    </div>
     {% for searchResult in searchResults %}
 
         <div class="container-fluid text-center" style="margin-bottom: 40px">
@@ -34,4 +43,24 @@
         </div>
         <hr>
     {% endfor %}
+
+    <script>
+        function sendData() {
+            let word = $("#priceFilter").val();
+            console.log(word);
+            $.ajax({
+                type: 'GET',
+                url: '{% url 'index' %}',
+                data: {
+                    word: word,
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (error_data) {
+                    console.log(error_data)
+                }
+            });
+        }
+    </script>
 {% endblock %}

@@ -1,6 +1,6 @@
-def convert(text):
-    text = text.replace(" ", "_")
-    text = text.replace("(", "_")
-    text = text.replace(")", "_")
-    text = text.lower()
-    return text
+def convert(url):
+    url = url.replace(" ", "_")
+    url = url.replace("(", "_")
+    url = url.replace(")", "_")
+    url = url.lower()
+    return url

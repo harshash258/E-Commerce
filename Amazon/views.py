@@ -16,7 +16,7 @@ def index(request):
     print(data)
 
     products = Product.objects.all()
-    paginator = Paginator(products, 2)
+    paginator = Paginator(products, 5)
     page = request.GET.get('page')
     page_product = paginator.get_page(page)
 
@@ -99,7 +99,7 @@ def viewCart(request):
 
 def viewProduct(request, slug):
     try:
-        product = Product.objects.get(productName=slug)
+        product = Product.objects.get(url=slug)
         context = {
             'productName': product.productName,
             'product': product
