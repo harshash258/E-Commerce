@@ -1,35 +1,20 @@
-from django.shortcuts import render, HttpResponse, redirect
-from django.http import JsonResponse
-from .models import Product, Cart, Order, Customer
-from .forms import CreateUser
+import json
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import User
-import json
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.shortcuts import render, HttpResponse, redirect
 
-'''
-def index(request):
-    fil = request.getlist('price')
-    if fil:
-        if fil == "low":
-            products = Product.objects.all().order_by('productDiscountedPrice')
-        elif fil == "high":
-            products = Product.objects.all().order_by('-productDiscountedPrice')
-        else:
-            products = Product.objects.all()
-        context = {
-            'products': products
-        }
-        return JsonResponse(context)
-    else:
-        context = {}
-        return render(request, "Amazon/index.html", context)
-
-'''
+from .forms import CreateUser
+from .models import Product, Cart, Order, Customer
 
 
 def index(request):
+    data = request.GET.get('word')
+    print(data)
+
     products = Product.objects.all()
     paginator = Paginator(products, 2)
     page = request.GET.get('page')
@@ -163,4 +148,37 @@ def addToCart(request):
 
 
 def checkOut(request):
-    return render(request, "Amazon/checkout.html")
+    global order
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        user = Customer.objects.get(user=request.user)
+
+        order, created = Order.objects.get_or_create(customer=customer, orderCompleted=False)
+        items = order.cart_set.all()
+        numberOfItems = order.getNumberOfItems
+    else:
+        return redirect('login')
+
+    context = {
+        'user': user,
+        'items': items,
+        'order': order,
+        'totalItems': numberOfItems
+    }
+
+    return render(request, "Amazon/checkout.html", context)
+
+
+def payment(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        address = request.POST.get('address')
+        address2 = request.POST.get('address2')
+        state = request.POST.get('state')
+        pinCode = request.POST.get('pinCode')
+        number = request.POST.get('number')
+        fullAddress = name + " \n" + address + " " + address2 + " " + state + "-" + pinCode + " \nPhone Number: +91 " + number
+        Customer.objects.filter(user=request.user).update(address=fullAddress)
+
+    return render(request, "Amazon/payment.html")

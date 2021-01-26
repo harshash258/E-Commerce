@@ -1,7 +1,8 @@
-from django.urls import path, include
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
+
+from . import views
 
 urlpatterns = [
                   path('', views.index, name='index'),
@@ -14,5 +15,6 @@ urlpatterns = [
                   path("my_cart/", views.viewCart, name='myCart'),
                   path("updateItem/", views.addToCart),
                   path('profile/<username>/', views.viewProfile, name='profile'),
-                  path('checkout', views.checkOut, name='checkout')
+                  path('checkout/', views.checkOut, name='checkout'),
+                  path('payment', views.payment, name='payment')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

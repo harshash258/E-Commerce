@@ -24,6 +24,7 @@ class Customer(models.Model):
     email = models.EmailField(max_length=100)
     profileImage = models.ImageField(blank=True, null=True, default='profile.png')
     phoneNumber = models.CharField(max_length=10, blank=True, null=True)
+    address = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name

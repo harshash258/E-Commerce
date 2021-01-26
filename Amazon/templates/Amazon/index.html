@@ -17,12 +17,11 @@
 {% block body %}
 
     <script>
-        $('#priceFilter').on('change', 'input, select', function () {
 
 
+        function sendData() {
             let word = $("#priceFilter").val();
             console.log(word);
-
             $.ajax({
                 type: 'GET',
                 url: '{% url 'index' %}',
@@ -36,13 +35,14 @@
                     console.log(error_data)
                 }
             });
+        }
 
-        });
+
     </script>
 
     <div class="d-flex flex-row-reverse" style="margin-right: 20px; margin-bottom: 20px;">
         <label>
-            <select class="bg-dark" name="price" id="priceFilter">
+            <select class="bg-dark" name="price" id="priceFilter" onchange="sendData()">
                 <option value="normal" disabled>Sort by Price</option>
                 <option value="low">Low-to-High</option>
                 <option value="high">High-to-Low</option>

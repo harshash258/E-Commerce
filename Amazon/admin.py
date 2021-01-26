@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Product, Cart, Customer, Order
 from django.utils.html import format_html
+
+from .models import Product, Cart, Customer, Order
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -14,7 +15,12 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('productDiscountedPrice',)
 
 
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'phoneNumber', 'address')
+    list_display_links = ('user', 'name', 'phoneNumber', 'address')
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart)
-admin.site.register(Customer)
+admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order)
