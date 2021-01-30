@@ -8,14 +8,3 @@ select option {
     margin-right: 10px;
 }
 
-.pagination li {
-    margin: 5px;
-    cursor: pointer;
-}
-.disabled{
-    cursor: default;
-}
-.page-item:hover {
-    background: #5EA7EE;
-    border: 1px solid #5EA7EE;
-}

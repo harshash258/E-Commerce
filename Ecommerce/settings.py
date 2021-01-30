@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django.contrib.humanize',
     'ckeditor',
+    'django_filters',
+    'bootstrapform',
 ]
 
 MIDDLEWARE = [

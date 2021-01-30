@@ -1,6 +1,7 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
 {% load humanize %}
+{% load bootstrap %}
 
 
 {% block title %}
@@ -16,14 +17,14 @@
 
 
 {% block body %}
-    <div class="container-fluid" >
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" >
+    <div class="container-fluid">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
             </ol>
-            <div class="carousel-inner" >
+            <div class="carousel-inner">
                 <div class="carousel-item active" style="margin-bottom: 20px;">
                     <img src="{% static 'Amazon/images/tree.jpg' %}" height="300" class="d-block w-100" alt="...">
                 </div>
@@ -44,9 +45,14 @@
             </a>
         </div>
     </div>
+    <div>
+        <form method="GET" style="margin: 20px;" class="d-flex flex-row-reverse" id="filterForm">
+            <button type="submit" class="btn btn-success" style="margin-left: 5px;">Filter</button>
+            {{ filter.form| bootstrap_inline }}
+        </form>
+    </div>
 
-
-    {% for product in products %}
+    {% for product in filter.qs %}
         <div class="container-fluid text-center" style="margin-bottom: 40px">
             <a href="{% url 'viewProduct' product.url %}" style="float: left">
                 <img src="{{ product.productImage.url }}" width="120" height="140"
@@ -69,4 +75,5 @@
         </div>
         <hr>
     {% endfor %}
+
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Product, Cart, Customer, Order
+from .models import Product, Cart, Customer, Order, Shipment
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -24,3 +24,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order)
+admin.site.register(Shipment)

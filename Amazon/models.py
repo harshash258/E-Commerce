@@ -82,3 +82,15 @@ class Cart(models.Model):
     def getProductTotal(self):
         total = self.product.productDiscountedPrice * self.quantity
         return total
+
+
+class Shipment(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    orderId = models.CharField(max_length=100)
+    products = models.ManyToManyField(Product)
+    orderDate = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
+    phoneNumber = models.CharField(max_length=13)
+
+    def __str__(self):
+        return f"{self.orderId} - {self.customer.name}"

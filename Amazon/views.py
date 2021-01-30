@@ -3,18 +3,20 @@ import json
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import User
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
 
+from .filters import ProductFilters
 from .forms import CreateUser
-from .models import Product, Cart, Order, Customer
+from .models import Product, Cart, Order, Customer, Shipment
 
 
 def index(request):
     products = Product.objects.all()
+    price_filter = ProductFilters(request.GET, queryset=products)
     context = {
-        'products': products
+        'filter': price_filter
     }
     return render(request, "Amazon/index.html", context)
 
@@ -99,22 +101,23 @@ def viewProduct(request, slug):
 
 
 def searchProduct(request):
-    name = request.POST.get("search")
-    try:
-        product = Product.objects.filter(productName__contains=name)
-        paginator = Paginator(product, 5)
-        page = request.GET.get('page')
-        page_product = paginator.get_page(page)
-        if product:
-            context = {
-                'searchResults': page_product,
+    name = request.POST.get('search')
+    page_number = request.GET.get('page')
 
-            }
-            return render(request, "Amazon/searchResult.html", context)
-        else:
-            return render(request, "Amazon/searchResult.html", {'message': "No Product Found"})
-    except Product.DoesNotExist:
-        return HttpResponse("Page Not Found")
+    products = Product.objects.all()
+
+    if name:  # only filter when name provided
+        products = products.filter(productName__contains=name)
+
+    try:
+        page_product = Paginator(products, 2).get_page(page_number)
+    except EmptyPage:
+        return render(request, "Amazon/searchResult.html", {'message': "No Product Found"})
+
+    return render(request, "Amazon/searchResult.html", {
+        'searchResults': page_product,
+        'name': name
+    })
 
 
 def addToCart(request):
@@ -162,7 +165,6 @@ def checkOut(request):
 
 def payment(request):
     if request.method == "POST" and 'name' in request.POST:
-        name = request.POST.get('name')
         address = request.POST.get('address')
         address2 = request.POST.get('address2')
         state = request.POST.get('state')
@@ -171,8 +173,8 @@ def payment(request):
         fullAddress = address + " " + address2 + " " + state + " - " + pinCode
         Customer.objects.filter(user=request.user).update(address=fullAddress, phoneNumber=number)
 
-        print("1")
     elif request.POST == "POST" and 'address' in request.POST:
         fullAddress = request.POST.get('address')
 
+    shipment = Shipment.objects.create()
     return render(request, "Amazon/payment.html")
