@@ -1,5 +1,6 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}
     Amazon Copy - Search Result
@@ -10,7 +11,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-flex flex-row-reverse" style="margin-right: 20px; margin-bottom: 20px;">
+    <!--<div class="d-flex flex-row-reverse" style="display: none;margin-right: 20px; margin-bottom: 20px;">
         <label>
             <select class="bg-dark" name="price" id="priceFilter" onchange="sendData()">
                 <option value="normal" disabled>Sort by Price</option>
@@ -18,32 +19,74 @@
                 <option value="high">High-to-Low</option>
             </select>
         </label>
-    </div>
-    {% for searchResult in searchResults %}
+    </div>-->
+    {% if message %}
+        <div class="text-center">
+            <h1>{{ message }}</h1>
+        </div>
+    {% endif %}
+    {% for product in searchResults %}
 
         <div class="container-fluid text-center" style="margin-bottom: 40px">
-            <a href="{% url 'viewProduct' searchResult.productName %}" style="float: left">
-                <img src="{{ searchResult.productImage.url }}" width="120" height="140"
+            <a href="{% url 'viewProduct' product.url %}" style="float: left">
+                <img src="{{ product.productImage.url }}" width="120" height="140"
                      alt="Product Image">
             </a>
-            <a href="{% url 'viewProduct' searchResult.productName %}" style="cursor: pointer;">
+            <a href="{% url 'viewProduct' product.url %}" style="cursor: pointer;">
                 <label style="font-size: 26px; color: #0b7dda; cursor: pointer;">
-                    <b>{{ searchResult.productName }}</b>
+                    <b>{{ product.productName }}</b>
                 </label>
             </a><br>
             <label style="font-size: 20px;">
-                {{ searchResult.productDescription|slice:150|safe }}
+                {{ product.productDescription|slice:60|safe }}...
             </label><br>
             <br>
             <label style="font-size: 24px">
                 <b>Rs.</b>
-                <label style="text-decoration: line-through;font-size:14px">{{ searchResult.productRealPrice }}</label>
-                <b>{{ searchResult.productDiscountedPrice }}</b>
+                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice  | intcomma }}</label>
+                <b>{{ product.productDiscountedPrice | intcomma }}</b>
             </label>
         </div>
         <hr>
     {% endfor %}
 
+    <nav aria-label="...">
+        {% if products.has_other_pages %}
+            <ul class="pagination justify-content-center">
+
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page.number }}" tabindex="-1">
+                            Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for i  in products.paginator.page_range %}
+                    {% if products.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </nav>
     <script>
         function sendData() {
             let word = $("#priceFilter").val();

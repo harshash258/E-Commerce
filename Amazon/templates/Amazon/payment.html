@@ -5,6 +5,81 @@
     AmazonCopy - Payment
 {% endblock %}
 
+{% block style %}
+    .hide input{
+        margin:20px;
+    }
+{% endblock %}
+
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
+    <script src="{% static 'Amazon/js/payment.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'Amazon/css/paymentStyle.css' %}">
+{% endblock %}
+
 {% block body %}
 
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <h2 style="margin-bottom: 30px">Choose Payment Option</h2>
+                <form method="post" class="form-control">
+                    {% csrf_token %}
+                    <label>
+                        <input type="radio" name="paymentMethod">
+                        Cash on Delivery<br>
+                        <label class="text-muted">Pay for the Goods when you receive it on Your Doorstep.</label>
+                    </label><br>
+                    <hr>
+                    <label>
+                        <input type="radio" name="paymentMethod">
+                        BHIM UPI<br>
+                        <label class="text-muted">BHIM is an Indian mobile payment App developed by the National
+                            Payments Corporation of India, based on the Unified Payments Interface.</label>
+                    </label><br>
+                    <hr>
+                    <label>
+                        <input type="radio" name="paymentMethod" id="card" onclick="checkForCard()">
+                        Debit/Credit Card<br>
+                        <label class="text-muted">A credit card is a card issued by a financial institution, typically a
+                            bank, and it
+                            enables the cardholder to borrow funds from that institution</label>
+                    </label><br>
+                    <div class="hide text-center">
+                        <h4>Card Details</h4>
+                        <form class="form">
+                            <label><B>Card Holder Name</B>
+                                <input type="text" placeholder="Card Holder Name" autocomplete="off" >
+                            </label>
+                            <label><b>Card Number</b>
+                                <input type="number" placeholder="Card Number" autocomplete="off">
+                            </label><br>
+                            <label><b>Expiration Date</b>
+                                <input type="text" placeholder="MM / YY" autocomplete="off">
+                            </label>
+                            <label><b>CVV</b>
+                                <input type="password" placeholder="CVV" autocomplete="off">
+                            </label>
+                        </form>
+                    </div>
+                    <hr>
+                    <label>
+                        <input type="radio" name="paymentMethod">
+                        Net Banking<br>
+                        <label class="text-muted" style="margin-bottom: 50px">Net Banking is an electronic payment
+                            system that enables customers of
+                            a bank or other financial institution to conduct a range of financial transactions through
+                            the financial institution's website.</label>
+                    </label><br>
+                    <div class="text-center">
+                        <button class="btn btn-success rounded continue">
+                            Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

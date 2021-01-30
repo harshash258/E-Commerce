@@ -1,5 +1,6 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}
     Amazon - {{ productName }}
@@ -22,8 +23,8 @@
             <label id="description">{{ product.productInformation|safe }}</label><br>
             <label id="price">
                 <b>Rs.</b>
-                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice }}</label>
-                <b>{{ product.productDiscountedPrice }}</b>
+                <label style="text-decoration: line-through;font-size:14px">{{ product.productRealPrice | intcomma }}</label>
+                <b>{{ product.productDiscountedPrice | intcomma }}</b>
             </label>
 
             {% if user.is_authenticated %}

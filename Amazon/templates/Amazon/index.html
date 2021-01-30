@@ -16,22 +16,22 @@
 
 
 {% block body %}
-    <div class="container-fluid">
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <div class="container-fluid" >
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" >
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                 <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
             </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{% static 'Amazon/images/down.png' %}" class="d-block w-100" alt="...">
+            <div class="carousel-inner" >
+                <div class="carousel-item active" style="margin-bottom: 20px;">
+                    <img src="{% static 'Amazon/images/tree.jpg' %}" height="300" class="d-block w-100" alt="...">
                 </div>
-                <div class="carousel-item">
-                    <img src="{% static 'Amazon/images/up.png' %}" class="d-block w-100" alt="...">
+                <div class="carousel-item" style="margin-bottom: 20px;">
+                    <img src="{% static 'Amazon/images/nature2.jpg' %}" height="300" class="d-block w-100" alt="...">
                 </div>
-                <div class="carousel-item">
-                    <img src="{% static 'Amazon/images/up.png' %}" class="d-block w-100" alt="...">
+                <div class="carousel-item" style="margin-bottom: 20px;">
+                    <img src="{% static 'Amazon/images/nature3.jpg' %}" height="300" class="d-block w-100" alt="...">
                 </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -58,7 +58,7 @@
                 </label>
             </a><br>
             <label style="font-size: 20px;">
-                {{ product.productDescription|slice:60|safe }}
+                {{ product.productDescription|slice:60|safe }}...
             </label><br>
             <br>
             <label style="font-size: 24px">
@@ -69,44 +69,4 @@
         </div>
         <hr>
     {% endfor %}
-
-
-
-    <nav aria-label="...">
-        {% if products.has_other_pages %}
-            <ul class="pagination justify-content-center">
-
-                {% if products.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.previous_page.number }}" tabindex="-1">
-                            Previous</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" tabindex="-1">Previous</a>
-                    </li>
-                {% endif %}
-                {% for i  in products.paginator.page_range %}
-                    {% if products.number == i %}
-                        <li class="page-item active">
-                            <a class="page-link" href="#">{{ i }}</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-                {% if products.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">Next</a>
-                    </li>
-                {% endif %}
-            </ul>
-        {% endif %}
-    </nav>
 {% endblock %}

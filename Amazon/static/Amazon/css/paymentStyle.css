@@ -1,0 +1,12 @@
+.hide{
+    display: none;
+    border: 1px solid black;
+    margin: 20px;
+    padding: 10px;
+}
+.form{
+    padding: 10px;
+}
+.form input{
+    margin: 20px;
+}

@@ -17,6 +17,10 @@
     border-radius:10px;
     pa
     }
+    input[type="radio"]  {
+    margin-top: -1px;
+    vertical-align: middle;
+    }
 {% endblock %}
 
 {% block body %}
@@ -26,14 +30,17 @@
                  style="padding: 10px; margin: 5px;">
                 {% if user.address %}
                     <form action="{% url 'payment' %}" method="post" class="addressForm">
+                        {% csrf_token %}
                         <h2 class="text-center text-decoration-underline" style="margin-bottom: 100px;">
                             Saved Address</h2>
                         <label style="width: 300px;">
                             <input type="radio" name="address" value="{{ user.address }}" id="address">
-                            {{ user.address }}
+                            <strong>{{ user.name }}</strong>
+                            <br><label style="margin-left: 15px;">{{ user.address }}</label><br>
+                            <strong style="margin-left: 15px;">Phone Number:</strong> {{ user.phoneNumber }}
                         </label><br><br>
                         <div class="text-center">
-                            <button class="btn btn-primary" id="button" disabled>Proceed to Payment</button>
+                            <button class="btn btn-primary continue" disabled>Proceed to Payment</button>
                         </div>
                     </form>
                 {% else %}
@@ -139,7 +146,18 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-       document.getElementById('button').disabled = !document.getElementById('address').checked;
+    <script>
+        function checkProgress() {
+            if ($("input:radio[name*='address']:checked").length !== 0) {
+                $('.continue').prop('disabled', false);
+            } else {
+                $('.continue').prop('disabled', true);
+            }
+        }
+
+        $(function () {
+            checkProgress();
+            $("input:radio[name*='address']").change(checkProgress);
+        });
     </script>
 {% endblock %}

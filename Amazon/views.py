@@ -12,19 +12,9 @@ from .models import Product, Cart, Order, Customer
 
 
 def index(request):
-    data = request.GET.get('word')
-    print(data)
-
     products = Product.objects.all()
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    page_product = paginator.get_page(page)
-
-    fil = request.GET.get('price')
-    print(fil)
-
     context = {
-        'products': page_product
+        'products': products
     }
     return render(request, "Amazon/index.html", context)
 
@@ -81,7 +71,6 @@ def logoutUser(request):
 
 
 def viewCart(request):
-    global order
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, orderCompleted=False)
@@ -113,13 +102,17 @@ def searchProduct(request):
     name = request.POST.get("search")
     try:
         product = Product.objects.filter(productName__contains=name)
-        if product is not None:
+        paginator = Paginator(product, 5)
+        page = request.GET.get('page')
+        page_product = paginator.get_page(page)
+        if product:
             context = {
-                'searchResults': product,
+                'searchResults': page_product,
+
             }
             return render(request, "Amazon/searchResult.html", context)
         else:
-            return HttpResponse("No Product Found")
+            return render(request, "Amazon/searchResult.html", {'message': "No Product Found"})
     except Product.DoesNotExist:
         return HttpResponse("Page Not Found")
 
@@ -148,12 +141,9 @@ def addToCart(request):
 
 
 def checkOut(request):
-    global order
-
     if request.user.is_authenticated:
         customer = request.user.customer
         user = Customer.objects.get(user=request.user)
-
         order, created = Order.objects.get_or_create(customer=customer, orderCompleted=False)
         items = order.cart_set.all()
         numberOfItems = order.getNumberOfItems
@@ -171,14 +161,18 @@ def checkOut(request):
 
 
 def payment(request):
-    if request.method == "POST":
+    if request.method == "POST" and 'name' in request.POST:
         name = request.POST.get('name')
         address = request.POST.get('address')
         address2 = request.POST.get('address2')
         state = request.POST.get('state')
         pinCode = request.POST.get('pinCode')
         number = request.POST.get('number')
-        fullAddress = name + " \n" + address + " " + address2 + " " + state + "-" + pinCode + " \nPhone Number: +91 " + number
-        Customer.objects.filter(user=request.user).update(address=fullAddress)
+        fullAddress = address + " " + address2 + " " + state + " - " + pinCode
+        Customer.objects.filter(user=request.user).update(address=fullAddress, phoneNumber=number)
+
+        print("1")
+    elif request.POST == "POST" and 'address' in request.POST:
+        fullAddress = request.POST.get('address')
 
     return render(request, "Amazon/payment.html")

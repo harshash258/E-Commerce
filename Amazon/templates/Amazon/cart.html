@@ -1,5 +1,6 @@
 {% extends "Amazon/HTMLtemplate.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}
     Amazon Copy - My Cart
@@ -7,7 +8,7 @@
 
 {% block style %}
     img:hover{
-        background-color: #AEAEAE;
+    background-color: #AEAEAE;
     cursor:pointer
     }
 
@@ -19,61 +20,68 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="box-element">
+    {% if items %}
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="box-element">
 
-                    <a class="btn btn-outline-dark" href="{% url 'index' %}">&#x2190; Continue Shopping</a>
-                    <br>
-                    <br>
-                    <table class="table">
-                        <tr>
-                            <th><h5>Items: <strong>{{ order.getCartItems }}</strong></h5></th>
-                            <th><h5>Total:<strong> Rs. {{ order.getCartTotal }}</strong></h5></th>
-                            <th>
-                                <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
-                            </th>
-                        </tr>
-                    </table>
-
-                </div>
-
-                <br>
-                <div class="box-element">
-                    <table class="table table-hover text-center font-monospace">
-                        <tr>
-                            <th></th>
-                            <th>Name of Item</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                        </tr>
-                        {% for item in items %}
-                            <tr style="border-bottom: 1px solid #a0a0a0;">
-                                <td class="align-middle"><img src="{{ item.product.productImage.url }}" width="80"
-                                                              height="50"
-                                                              alt="{{ item.product.productName }}"></td>
-                                <td class="align-middle">{{ item.product.productName }}</td>
-                                <td class="align-middle">{{ item.product.productDiscountedPrice }}</td>
-                                <td class="align-middle">
-                                   &nbsp;
-                                    <img data-product="{{ item.product.productId }}" data-action="add"
-                                         src="{% static 'Amazon/images/up.png' %}" width="20" height="10"
-                                         alt="increase quantity" class="update-cart"><br>
-                                    {{ item.quantity }}
-
-                                    <img data-product="{{ item.product.productId }}" data-action="remove"
-                                         src="{% static 'Amazon/images/down.png' %}" width="20" height="10"
-                                         alt="decrease quantity" class="update-cart ">
-                                </td>
-                                <td class="align-middle">{{ item.getProductTotal }}</td>
+                        <a class="btn btn-outline-dark" href="{% url 'index' %}">&#x2190; Continue Shopping</a>
+                        <br>
+                        <br>
+                        <table class="table">
+                            <tr>
+                                <th><h5>Items: <strong>{{ order.getCartItems }}</strong></h5></th>
+                                <th><h5>Total:<strong> Rs. {{ order.getCartTotal | intcomma }}</strong></h5></th>
+                                <th>
+                                    <a style="float:right; margin:5px;" class="btn btn-success"
+                                       href="{% url 'checkout' %}">Checkout</a>
+                                </th>
                             </tr>
-                        {% endfor %}
+                        </table>
 
-                    </table>
+                    </div>
+
+                    <br>
+                    <div class="box-element">
+                        <table class="table table-hover text-center font-monospace">
+                            <tr>
+                                <th></th>
+                                <th>Name of Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                            {% for item in items %}
+                                <tr style="border-bottom: 1px solid #a0a0a0;">
+                                    <td class="align-middle"><img src="{{ item.product.productImage.url }}" width="80"
+                                                                  height="50"
+                                                                  alt="{{ item.product.productName }}"></td>
+                                    <td class="align-middle">{{ item.product.productName }}</td>
+                                    <td class="align-middle">{{ item.product.productDiscountedPrice | intcomma }}</td>
+                                    <td class="align-middle">
+                                        &nbsp;
+                                        <img data-product="{{ item.product.productId }}" data-action="add"
+                                             src="{% static 'Amazon/images/up.png' %}" width="20" height="10"
+                                             alt="increase quantity" class="update-cart"><br>
+                                        {{ item.quantity }}
+
+                                        <img data-product="{{ item.product.productId }}" data-action="remove"
+                                             src="{% static 'Amazon/images/down.png' %}" width="20" height="10"
+                                             alt="decrease quantity" class="update-cart ">
+                                    </td>
+                                    <td class="align-middle">{{ item.getProductTotal| intcomma }}</td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="text-center container">
+            <h2 class="h-25">There is Absolutely Nothing in Your Cart. Please add some items.</h2>
+        </div>
+    {% endif %}
 {% endblock %}
