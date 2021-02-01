@@ -1,0 +1,28 @@
+{% extends "Amazon/HTMLtemplate.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+    AmazonCopy - Order Successful
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h2 class="alert-success">Order Placed Successfully</h2>
+                <div id="orderDetails">
+                    <label><b>Order ID:</b>{{ }}</label><br>
+                    {% for product in products %}
+                    {% endfor %}
+                    <label><b>Shipping Address:</b>{{ }}</label><br>
+                    <label><b>Phone Number:</b>{{ }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

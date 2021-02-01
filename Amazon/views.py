@@ -1,11 +1,14 @@
+import datetime
 import json
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import User
 from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
+from django.utils import timezone
 
 from .filters import ProductFilters
 from .forms import CreateUser
@@ -21,6 +24,7 @@ def index(request):
     return render(request, "Amazon/index.html", context)
 
 
+@login_required(login_url='login')
 def viewProfile(request, username):
     user = User.objects.get(username=username)
     customer = Customer.objects.get(user=user)
@@ -32,39 +36,45 @@ def viewProfile(request, username):
 
 
 def register(request):
-    form = CreateUser()
-    if request.method == 'POST':
-        form = CreateUser(request.POST)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            customer = Customer.objects.create(user=request.user, email=email)
-            customer.save()
-            return redirect('index')
-        else:
-            messages.error(request, "Error in creating a Account")
-            return redirect('register')
-    context = {
-        'form': form,
-    }
-    return render(request, "Amazon/register.html", context)
+    if request.user.is_authenticated:
+        return redirect('index')
+    else:
+        form = CreateUser()
+        if request.method == 'POST':
+            form = CreateUser(request.POST)
+            if form.is_valid():
+                form.save()
+                email = form.cleaned_data.get('email')
+                customer = Customer.objects.create(user=request.user, email=email)
+                customer.save()
+                return redirect('index')
+            else:
+                messages.error(request, "Error in creating a Account")
+                return redirect('register')
+        context = {
+            'form': form,
+        }
+        return render(request, "Amazon/register.html", context)
 
 
 def signIn(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+    if request.user.is_authenticated:
+        return redirect('index')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.error(request, "Username or password incorrect")
-    context = {
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                messages.error(request, "Username or password incorrect")
+        context = {
 
-    }
-    return render(request, "Amazon/login.html", context)
+        }
+        return render(request, "Amazon/login.html", context)
 
 
 def logoutUser(request):
@@ -164,6 +174,8 @@ def checkOut(request):
 
 
 def payment(request):
+    fullAddress = ''
+    number = ''
     if request.method == "POST" and 'name' in request.POST:
         address = request.POST.get('address')
         address2 = request.POST.get('address2')
@@ -175,6 +187,18 @@ def payment(request):
 
     elif request.POST == "POST" and 'address' in request.POST:
         fullAddress = request.POST.get('address')
+        number = Customer.objects.filter(user=request.user).values('phoneNumber')
 
-    shipment = Shipment.objects.create()
+    print(fullAddress)
+    print(number)
     return render(request, "Amazon/payment.html")
+
+
+def orderSuccessful(request):
+    '''
+        if request.method == 'POST':
+                    order = Shipment.objects.create(customer=request.user.customer, orderId=timezone.now(),
+                                        orderDate=datetime.datetime.now(), address=fullAddress,
+                                        phoneNumber=number)
+    '''
+    return render(request, "Amazon/order_success.html")

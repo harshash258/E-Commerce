@@ -1,4 +1,4 @@
-function checkProgress() {
+/*function checkProgress() {
     if ($("input:radio[name*='paymentMethod']:checked").length !== 0) {
         $('.continue').prop('disabled', false);
     } else {
@@ -8,7 +8,8 @@ function checkProgress() {
 
 $(function () {
     checkProgress();
-    $("input:radio[name*='paymentMethod']").change(checkProgress, checkForCard);
+    $("input:radio[name*='paymentMethod']").change(checkProgress);
+    $("input:radio[name*='paymentMethod']").change(checkForCard);
 });
 
 function checkForCard() {
@@ -17,4 +18,4 @@ function checkForCard() {
     }else {
         $('.hide').css("display", "none")
     }
-}
+}*/

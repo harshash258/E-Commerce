@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-7">
                 <h2 style="margin-bottom: 30px">Choose Payment Option</h2>
-                <form method="post" class="form-control">
+                <form method="post" class="form-control" action="{% url 'success' %}">
                     {% csrf_token %}
                     <label>
                         <input type="radio" name="paymentMethod">
@@ -47,34 +47,10 @@
                             bank, and it
                             enables the cardholder to borrow funds from that institution</label>
                     </label><br>
-                    <div class="hide text-center">
-                        <h4>Card Details</h4>
-                        <form class="form">
-                            <label><B>Card Holder Name</B>
-                                <input type="text" placeholder="Card Holder Name" autocomplete="off" >
-                            </label>
-                            <label><b>Card Number</b>
-                                <input type="number" placeholder="Card Number" autocomplete="off">
-                            </label><br>
-                            <label><b>Expiration Date</b>
-                                <input type="text" placeholder="MM / YY" autocomplete="off">
-                            </label>
-                            <label><b>CVV</b>
-                                <input type="password" placeholder="CVV" autocomplete="off">
-                            </label>
-                        </form>
-                    </div>
                     <hr>
-                    <label>
-                        <input type="radio" name="paymentMethod">
-                        Net Banking<br>
-                        <label class="text-muted" style="margin-bottom: 50px">Net Banking is an electronic payment
-                            system that enables customers of
-                            a bank or other financial institution to conduct a range of financial transactions through
-                            the financial institution's website.</label>
-                    </label><br>
+
                     <div class="text-center">
-                        <button class="btn btn-success rounded continue">
+                        <button class="btn btn-success rounded continue" name="place" type="submit">
                             Place Order
                         </button>
                     </div>
