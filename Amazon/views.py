@@ -1,5 +1,6 @@
 import datetime
 import json
+import time
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +9,6 @@ from django.contrib.auth.forms import User
 from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
-from django.utils import timezone
 
 from .filters import ProductFilters
 from .forms import CreateUser
@@ -30,7 +30,8 @@ def viewProfile(request, username):
     customer = Customer.objects.get(user=user)
     context = {
         'user': user,
-        'customer': customer
+        'customer': customer,
+        'shipment': Shipment.objects.filter(customer=request.user.customer)
     }
     return render(request, "Amazon/profile.html", context)
 
@@ -187,7 +188,6 @@ def payment(request):
 
     elif request.POST == "POST" and 'address' in request.POST:
         fullAddress = request.POST.get('address')
-        number = Customer.objects.filter(user=request.user).values('phoneNumber')
 
     print(fullAddress)
     print(number)
@@ -195,10 +195,26 @@ def payment(request):
 
 
 def orderSuccessful(request):
-    '''
-        if request.method == 'POST':
-                    order = Shipment.objects.create(customer=request.user.customer, orderId=timezone.now(),
-                                        orderDate=datetime.datetime.now(), address=fullAddress,
-                                        phoneNumber=number)
-    '''
-    return render(request, "Amazon/order_success.html")
+    number = Customer.objects.filter(user=request.user).values('phoneNumber')
+    fullAddress = Customer.objects.filter(user=request.user).values('address')
+    timeIn = round(time.time() * 1000)  # convert current time in milliSecond
+    if request.method == 'POST':
+        order = Shipment(customer=request.user.customer, orderId=timeIn,
+                         orderDate=datetime.datetime.now().replace(microsecond=0), address=fullAddress,
+                         phoneNumber=number)
+        order.save()
+        user = Customer.objects.get(user=request.user)
+        preOrder = Order.objects.get(customer=user)
+        carts = Cart.objects.filter(order=preOrder)
+        for cart in carts:
+            print(cart)
+            order.products.add(cart)
+
+        Cart.objects.filter(order=preOrder).delete()
+        preOrder.delete()
+    else:
+        return HttpResponse("Problem in Placing the Order")
+    context = {
+        'shipment': Shipment.objects.filter(customer=request.user.customer, orderId=timeIn)
+    }
+    return render(request, "Amazon/order_success.html", context)

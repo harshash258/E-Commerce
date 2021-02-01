@@ -87,7 +87,7 @@ class Cart(models.Model):
 class Shipment(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     orderId = models.CharField(max_length=100)
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Cart)
     orderDate = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     phoneNumber = models.CharField(max_length=13)

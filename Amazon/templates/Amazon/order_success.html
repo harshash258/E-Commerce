@@ -16,11 +16,13 @@
             <div class="col-md-7">
                 <h2 class="alert-success">Order Placed Successfully</h2>
                 <div id="orderDetails">
-                    <label><b>Order ID:</b>{{ }}</label><br>
-                    {% for product in products %}
-                    {% endfor %}
-                    <label><b>Shipping Address:</b>{{ }}</label><br>
-                    <label><b>Phone Number:</b>{{ }}</label>
+                    <ul>
+                        {% for product in  shipment %}
+                            {% for a in product.products.all %}
+                                <li>{{ a }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>

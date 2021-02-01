@@ -78,4 +78,25 @@
             </div>
         </div>
     </div>
+    <hr class="bg-dark">
+    <div class="container">
+        <div class="col-8">
+            <h2>Your Recent Orders</h2>
+            {% if shipment %}
+                {% for orders in shipment %}
+                    <label><b>OrderId:</b>{{ orders.orderId }}</label>
+                    <ul>
+                        {% for products  in orders.products.all %}
+                            <li>{{ products }}</li>
+                        {% endfor %}
+                    </ul>
+                    <label><b>Order Date/Time:</b>{{ orders.orderDate }}</label>
+                    <label><b>Shipping Address:</b>{{ orders.address }}</label>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <h2>You Haven't placed an Order Yet</h2>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
