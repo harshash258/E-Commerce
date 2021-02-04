@@ -8,6 +8,7 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -22,7 +23,7 @@
                                      class="rounded-circle"
                                      width="150">
                             {% else %}
-                                <img src="{% static 'Amazon/images/profile.png' %}" alt="profile pics"
+                                <img src="{% static 'Amazon/images/../../../media/profile.png' %}" alt="profile pics"
                                      class="rounded-circle"
                                      width="150">
                             {% endif %}
@@ -61,7 +62,7 @@
                                 <h6 class="mb-0"><strong>Mobile</strong></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ customer.phoneNumber }}
+                                +91 {{ customer.phoneNumber }}
                             </div>
                         </div>
                         <hr>
@@ -78,24 +79,27 @@
             </div>
         </div>
     </div>
-    <hr class="bg-dark">
+    <hr class="bg-dark" style="height: 3px">
     <div class="container">
         <div class="col-8">
             <h2>Your Recent Orders</h2>
+            <br><br>
             {% if shipment %}
                 {% for orders in shipment %}
-                    <label><b>OrderId:</b>{{ orders.orderId }}</label>
-                    <ul>
-                        {% for products  in orders.products.all %}
-                            <li>{{ products }}</li>
-                        {% endfor %}
-                    </ul>
-                    <label><b>Order Date/Time:</b>{{ orders.orderDate }}</label>
-                    <label><b>Shipping Address:</b>{{ orders.address }}</label>
+                    <label><b>OrderId: </b>{{ orders.orderId }}</label>
+
+                    {% for products  in orders.products.all %}
+                        <p>{{ products }}</p><br>
+                    {% endfor %}
+
+                    <label><b>Order Date/Time: </b>{{ orders.orderDate }}</label>
+                    <label><b>Shipping Address: </b>{{ orders.address }}</label>
                     <hr>
                 {% endfor %}
             {% else %}
-                <h2>You Haven't placed an Order Yet</h2>
+                <div class="text-center">
+                    <h4 class="text-white bg-primary rounded" style="width: 400px;">You Haven't placed an Order Yet</h4>
+                </div>
             {% endif %}
         </div>
     </div>

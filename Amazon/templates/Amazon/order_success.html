@@ -7,22 +7,46 @@
 {% endblock %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
 {% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-7" style="padding: 10px;">
                 <h2 class="alert-success">Order Placed Successfully</h2>
-                <div id="orderDetails">
-                    <ul>
-                        {% for product in  shipment %}
-                            {% for a in product.products.all %}
-                                <li>{{ a }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                    </ul>
+                <div id="orderDetails" class="rounded" style="padding: 10px;  border: 1px solid black">
+                    {% for details in shipment %}
+                        <label class="float-start text-primary"><strong class="text-success">OrderId: </strong>{{ details.orderId }}</label>
+                        <label class="float-end text-primary"><strong class="text-success">Order Date & Time: </strong>{{ details.orderDate }}</label>
+                        <br>
+                        <label><strong class="text-success">Customer Name & Address: </strong>
+                            <label class="text-primary">{{ details.customer }}, </label><br>
+                            <label class="text-primary" style="width: 300px;"><i>{{ details.address }}</i></label><br>
+                            <label class="text-primary"><strong class="text-success">Phone Number: </strong><i>{{ details.phoneNumber }}</i></label>
+                        </label>
+                        <label class="float-end text-primary"><strong class="text-success">Order Total: </strong>{{ details.orderTotal | intcomma }}
+                        </label>
+                    {% endfor %}
+                    <br><br>
+                    <h5 class="font-weight-bold"><u>Products</u></h5>
+                    {% for products in cart %}
+                        <div class="card" style="display: inline">
+                            <div class="float-start">
+                                <img src="{{ products.product.productImage.url }}" width="80"
+                                     height="80"
+                                     alt="{{ products.product.productName }}">
+                            </div>
+                            <div>
+                                <h6 class="card-title" style="color:#0676ff">{{ products.product.productName }}</h6>
+                            </div>
+                        </div>
+                        <div style="position: relative; bottom:25px;">
+                            <label class="float-start">
+                                <strong>Price:</strong>{{ products.product.productDiscountedPrice | intcomma }}
+                            </label>
+                            <label class="float-end"><strong>Qty: </strong>{{ products.quantity }}</label>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

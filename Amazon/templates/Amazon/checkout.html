@@ -9,6 +9,7 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'Amazon/css/checkoutStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'Amazon/css/baseStyle.css' %}">
 {% endblock %}
 
 {% block style %}
@@ -38,10 +39,16 @@
                             <strong>{{ user.name }}</strong>
                             <br><label style="margin-left: 15px;">{{ user.address }}</label><br>
                             <strong style="margin-left: 15px;">Phone Number:</strong> {{ user.phoneNumber }}
-                        </label><br><br>
+                        </label>
+                        <div class="float-end">
+                            <a class="btn btn-primary">Edit</a>
+                            <a class="btn btn-danger">Delete</a>
+                        </div>
+                        <br><br>
                         <div class="text-center">
                             <button class="btn btn-primary continue" disabled>Proceed to Payment</button>
                         </div>
+
                     </form>
                 {% else %}
                     <form action="{% url 'payment' %}" method="post" class="addressForm">
@@ -117,6 +124,7 @@
                         <div class="text-center" style="margin-top: 50px">
                             <button class="btn btn-primary" id="placeOrder">Proceed to Payment</button>
                         </div>
+
                     </form>
 
                 {% endif %}

@@ -10,7 +10,6 @@
 
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'Amazon/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'Amazon/css/indexStyle.css' %}">
     <script src="{% static 'Amazon/js/bootstrap.min.js' %}"></script>
 {% endblock %}
@@ -60,11 +59,12 @@
             </a>
             <a href="{% url 'viewProduct' product.url %}" style="cursor: pointer;">
                 <label style="font-size: 26px; color: #0b7dda; cursor: pointer;">
-                    <b>{{ product.productName }}</b>
+
+                    <b>{{ product.productName|slice:80 }}...</b>
                 </label>
             </a><br>
-            <label style="font-size: 20px;">
-                {{ product.productDescription|slice:60|safe }}...
+            <label style="font-size: 20px;" class="text-muted">
+                <i>{{ product.productDescription|slice:80|safe }}...</i>
             </label><br>
             <br>
             <label style="font-size: 24px">

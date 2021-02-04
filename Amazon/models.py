@@ -74,6 +74,7 @@ class Cart(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
     quantity = models.IntegerField(default=0, blank=True, null=True)
     dateAdded = models.DateTimeField(auto_now_add=True)
+    orderId = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.product} : {self.quantity}"
@@ -91,6 +92,8 @@ class Shipment(models.Model):
     orderDate = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     phoneNumber = models.CharField(max_length=13)
+    orderTotal = models.CharField(max_length=6)
+    modeOfPayment = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.orderId} - {self.customer.name}"
+        return f"{self.orderId}"

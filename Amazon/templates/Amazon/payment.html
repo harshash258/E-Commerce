@@ -28,20 +28,20 @@
                 <form method="post" class="form-control" action="{% url 'success' %}">
                     {% csrf_token %}
                     <label>
-                        <input type="radio" name="paymentMethod">
+                        <input type="radio" name="paymentMethod" value="Cash on Delivery">
                         Cash on Delivery<br>
                         <label class="text-muted">Pay for the Goods when you receive it on Your Doorstep.</label>
                     </label><br>
                     <hr>
                     <label>
-                        <input type="radio" name="paymentMethod">
+                        <input type="radio" name="paymentMethod" value="BHIM UPI">
                         BHIM UPI<br>
                         <label class="text-muted">BHIM is an Indian mobile payment App developed by the National
                             Payments Corporation of India, based on the Unified Payments Interface.</label>
                     </label><br>
                     <hr>
                     <label>
-                        <input type="radio" name="paymentMethod" id="card" onclick="checkForCard()">
+                        <input type="radio" name="paymentMethod" id="card" value="Debit/Credit Card">
                         Debit/Credit Card<br>
                         <label class="text-muted">A credit card is a card issued by a financial institution, typically a
                             bank, and it

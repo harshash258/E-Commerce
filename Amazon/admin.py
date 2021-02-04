@@ -25,8 +25,13 @@ class OrderAdmin(admin.ModelAdmin):
     list_display_links = ('customer', 'dateOrdered', 'orderCompleted', 'transactionId')
 
 
+class ShipmentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'orderId', 'customer', 'orderDate', 'orderTotal')
+    list_display_links = ('orderId', 'customer', 'orderDate', 'orderTotal')
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Shipment)
+admin.site.register(Shipment, ShipmentAdmin)

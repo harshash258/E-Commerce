@@ -18,6 +18,7 @@ from .models import Product, Cart, Order, Customer, Shipment
 def index(request):
     products = Product.objects.all()
     price_filter = ProductFilters(request.GET, queryset=products)
+
     context = {
         'filter': price_filter
     }
@@ -44,11 +45,21 @@ def register(request):
         if request.method == 'POST':
             form = CreateUser(request.POST)
             if form.is_valid():
-                form.save()
-                email = form.cleaned_data.get('email')
-                customer = Customer.objects.create(user=request.user, email=email)
-                customer.save()
-                return redirect('index')
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password1')
+                passwordAgain = form.cleaned_data.get('password2')
+                if password != passwordAgain:
+                    messages.error(request, "Passwords do not match.")
+                    return redirect('register')
+                else:
+                    form.save()
+                    email = form.cleaned_data.get('email')
+                    user = authenticate(request, username=username, password=password)
+                    if user is not None:
+                        login(request, user)
+                    customer = Customer.objects.create(user=user, email=email)
+                    customer.save()
+                    return redirect('index')
             else:
                 messages.error(request, "Error in creating a Account")
                 return redirect('register')
@@ -72,10 +83,7 @@ def signIn(request):
                 return redirect('index')
             else:
                 messages.error(request, "Username or password incorrect")
-        context = {
-
-        }
-        return render(request, "Amazon/login.html", context)
+        return render(request, "Amazon/login.html")
 
 
 def logoutUser(request):
@@ -117,7 +125,7 @@ def searchProduct(request):
 
     products = Product.objects.all()
 
-    if name:  # only filter when name provided
+    if name:
         products = products.filter(productName__contains=name)
 
     try:
@@ -178,13 +186,16 @@ def payment(request):
     fullAddress = ''
     number = ''
     if request.method == "POST" and 'name' in request.POST:
+        name = request.POST.get('name')
         address = request.POST.get('address')
         address2 = request.POST.get('address2')
         state = request.POST.get('state')
         pinCode = request.POST.get('pinCode')
         number = request.POST.get('number')
-        fullAddress = address + " " + address2 + " " + state + " - " + pinCode
-        Customer.objects.filter(user=request.user).update(address=fullAddress, phoneNumber=number)
+        fullAddress = address + ", " + address2 + " " + state + " - " + pinCode
+        checkName = Customer.objects.filter(user=request.user).values('name')
+        print(checkName)
+        Customer.objects.filter(user=request.user).update(address=fullAddress, phoneNumber=number, name=name)
 
     elif request.POST == "POST" and 'address' in request.POST:
         fullAddress = request.POST.get('address')
@@ -197,24 +208,27 @@ def payment(request):
 def orderSuccessful(request):
     number = Customer.objects.filter(user=request.user).values('phoneNumber')
     fullAddress = Customer.objects.filter(user=request.user).values('address')
-    timeIn = round(time.time() * 1000)  # convert current time in milliSecond
+    timeIn = round(time.time() * 1000)
+    total = Order.objects.get(customer=request.user.customer, orderCompleted=False).getCartTotal
+    print(total)
     if request.method == 'POST':
+        modeOfPayment = request.POST.get('paymentMethod')
         order = Shipment(customer=request.user.customer, orderId=timeIn,
                          orderDate=datetime.datetime.now().replace(microsecond=0), address=fullAddress,
-                         phoneNumber=number)
+                         phoneNumber=number, orderTotal=total, modeOfPayment=modeOfPayment)
         order.save()
         user = Customer.objects.get(user=request.user)
         preOrder = Order.objects.get(customer=user)
         carts = Cart.objects.filter(order=preOrder)
         for cart in carts:
-            print(cart)
             order.products.add(cart)
 
-        Cart.objects.filter(order=preOrder).delete()
+        carts.update(orderId=timeIn)
         preOrder.delete()
     else:
         return HttpResponse("Problem in Placing the Order")
     context = {
-        'shipment': Shipment.objects.filter(customer=request.user.customer, orderId=timeIn)
+        'shipment': Shipment.objects.filter(customer=request.user.customer, orderId=timeIn),
+        'cart': Cart.objects.filter(orderId=timeIn)
     }
     return render(request, "Amazon/order_success.html", context)
